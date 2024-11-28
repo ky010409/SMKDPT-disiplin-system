@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form with Bootstrap</title>
+    <title>Rekod Disiplin Murid SMKDPT</title>
     <link
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -26,7 +26,7 @@
   <body class="bg-light">
     <div class="container">
       <div class="form-container">
-        <h4 class="text-center mb-4">Rekod kesalahan disiplin murid</h4>
+        <h4 class="text-center mb-4">Rekod Kesalahan Disiplin Murid</h4>
         <form id="submit-to-google-sheet">
 
           <!--
@@ -44,48 +44,53 @@
           -->
 
           <div class="form-group">
-            <label for="kelas">Kelas Murid: </label>
-            <input
-              class="form-control"
-              type="text"
-              name="Kelas Murid"
-              id="kelas"
-              placeholder="Kelas"
-              required
-            />
+            <label for="tingkatan-pelajar">Tingkatan Pelajar</label>
+            <select class="form-control" name="Tingkatan Pelajar" id="tingkatan" required>
+              <option value="" disabled selected hidden>Pilih Tingkatan...</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <label for="nama-murid">Nama Murid: </label>
-            <input
-              class="form-control"
-              type="text"
-              name="Nama Murid"
-              id="nama-murid"
-              placeholder="Nama Murid"
-              required
-            />
+            <label for="kelas-pelajar">Kelas Pelajar</label>
+            <select class="form-control" name="Kelas Pelajar" id="kelas" required>
+              <option value="" disabled selected hidden>Pilih Kelas...</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <label for="kesalahan">Kesalahan Murid: </label>
-            <textarea
-              class="form-control"
-              name="Kesalahan Murid"
-              id="kesalahan"
-              placeholder="Kesalahan Murid"
-              required
-            ></textarea>
+            <label for="nama-pelajar">Nama Pelajar</label>
+            <select class="form-control" name="Nama Pelajar" id="nama" required>
+              <option value="" disabled selected hidden>Pilih Nama...</option>
+            </select>
           </div>
+
           <div class="form-group">
-            <label for="nama-pengawas">Nama Pengawas: </label>
-            <input
-              class="form-control"
-              type="text"
-              name="Nama Pengawas"
-              id="nama-pengawas"
-              placeholder="Nama Pengawas"
-              required
-            />
+            <label for="kesalahan-pelajar">Jenis Kesalahan: </label>
+            <select class="form-control" name="Jenis Kesalahan" id="kesalahan" required>
+              <option value="" disabled selected hidden>Kesalahan... </option>
+              <option value="1&#41; Datang Lambat">
+                1. Datang Lambat</option>
+              <option value="2&#41; Membawa Barang Larangan ( telefon / vape / pod )">
+                2. Membawa Barang Larangan ( telefon / vape / pod )</option>
+              <option value="3&#41; Membawa Barang Larangan SELAIN ( telefon / vape / pod )">
+                3. Membawa Barang Larangan SELAIN ( telefon / vape / pod )</option>
+              <option value="4&#41; Tidak Memakai Stoking Hitam / Lencana / Tanda Nama / Tali Leher">
+                4. Tidak Memakai Stoking Hitam / Lencana / Tanda Nama / Tali Leher</option>
+              <option value="5&#41; Kekemasan Diri PEREMPUAN Tidak Memotong Kuku / Memakai Make Up / Gincu / Rambut">
+                5. Kekemasan Diri PEREMPUAN Tidak Memotong Kuku / Memakai Make Up / Gincu / Rambut</option>
+              <option value="6&#41; Kekemasan Diri LELAKI Tidak Memotong Kuku / Rambut">
+                6. Kekemasan Diri LELAKI Tidak Memotong Kuku / Rambut</option>
+              <option value="7&#41; Tidak Memakai Pakaian Sekolah Mengikut Ketetapan">
+                7. Tidak Memakai Pakaian Sekolah Mengikut Ketetapan</option>
+              <option value="8&#41; Memotong / Membuang Getah Pada Seluar">
+                8. Memotong / Membuang Getah Pada Seluar</option>
+              <option value="9&#41; Tidak Membawa Kad Kehadiran / Tidak Scan Kehadiran">
+                9. Tidak Membawa Kad Kehadiran / Tidak Scan Kehadiran</option>
+              <option value="a&#41;  Bermain-main Semasa Solat / Lambat Solat / Ponteng Solat">
+                10. Bermain-main Semasa Solat / Lambat Solat / Ponteng Solat</option>
+            </select>
           </div>
+
           <div class="form-group">
             <label for="tarikh">Tarikh: </label>
             <input
@@ -98,14 +103,103 @@
             />
           </div>
 
-          <button type="submit" class="btn btn-primary btn-block">
-            Submit
-          </button>
+          <button type="submit" class="btn btn-primary btn-block">Submit</button>
         </form>
       </div>
     </div>
 
     <script>
+      // Shared Google Sheet ID (same for all Kelas)
+      const SHEET_ID = "1aAKU6--pTI-b-8dwba6GVesZ19eqKeZ5ywxJIJQh7_8";
+
+      // Tingkatan and Kelas-to-SheetName mappings
+      const tingkatanKelasMapping = {
+        "Tingkatan 2": {
+          "2 Firuz": "2 Firuz",
+          "2 Jauhar": "2 Jauhar",
+          "2 Berlian": "2 Berlian",
+          "2 Intan": "2 Intan",
+          "2 Zamrud": "2 Zamrud",
+          "2 Baiduri": "2 Baiduri"
+        },
+        "Tingkatan 3": {
+          "3 Firuz": "3 Firuz",
+          "3 Jauhar": "3 Jauhar",
+          "3 Berlian": "3 Berlian",
+          "3 Intan": "3 Intan",
+          "3 Zamrud": "3 Zamrud",
+          "3 Baiduri": "3 Baiduri",
+          "3 Delima": "3 Delima"
+        }
+      };
+
+      // Populate Tingkatan dropdown on page load
+      window.onload = function () {
+        const tingkatanSel = document.getElementById("tingkatan");
+        const kelasSel = document.getElementById("kelas");
+        const namaSel = document.getElementById("nama");
+
+        // Helper function to strip quotation marks from strings
+        function stripQuotes(str) {
+          return str.replace(/^["']|["']$/g, ""); // Removes both leading and trailing quotes
+        }
+
+        // Populate Tingkatan options (fixed values: Tingkatan 2, Tingkatan 3)
+        for (const tingkatan in tingkatanKelasMapping) {
+          const option = document.createElement("option");
+          option.value = tingkatan;
+          option.textContent = tingkatan;
+          tingkatanSel.appendChild(option);
+        }
+
+        // Update Kelas dropdown based on selected Tingkatan
+        tingkatanSel.onchange = function () {
+          kelasSel.length = 1; // Reset Kelas dropdown
+          namaSel.length = 1; // Reset Nama dropdown
+
+          const selectedTingkatan = tingkatanSel.value;
+          if (tingkatanKelasMapping[selectedTingkatan]) {
+            for (const kelas in tingkatanKelasMapping[selectedTingkatan]) {
+              const option = document.createElement("option");
+              option.value = kelas;
+              option.textContent = kelas;
+              kelasSel.appendChild(option);
+            }
+          }
+        };
+
+        // Fetch and Populate Nama dropdown based on selected Kelas
+        kelasSel.onchange = function () {
+          namaSel.length = 1; // Reset Nama dropdown
+
+          const selectedTingkatan = tingkatanSel.value;
+          const selectedKelas = kelasSel.value;
+
+          // Get the sheet name for the selected Kelas
+          const sheetName = tingkatanKelasMapping[selectedTingkatan][selectedKelas];
+          if (sheetName) {
+            // Construct the CSV URL dynamically using the Sheet ID and Sheet Name
+            const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
+
+            // Fetch the data from the corresponding sheet
+            fetch(CSV_URL)
+              .then((response) => response.text())
+              .then((csvText) => {
+                const rows = csvText.trim().split("\n").slice(0); // Skip the header row
+                rows.forEach((row) => {
+                  const nama = stripQuotes(row.split(",")[0]); // Assuming the first column contains student names
+                  const option = document.createElement("option");
+                  option.value = nama;
+                  option.textContent = nama;
+                  namaSel.appendChild(option);
+                });
+              })
+              .catch((error) => console.error("Error fetching the sheet:", error));
+          }
+        };
+      };
+    </script>
+    <script> //upload data
       const scriptURL =                       
       "https://script.google.com/macros/s/AKfycbxkcRNzbss6IvVISNEsj1Zs_BvW_vvJWSAZrMUSvRMybRoZCC70_qC5yNlT1d2TVm3ecg/exec";
       const form = document.forms["submit-to-google-sheet"];
